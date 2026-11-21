@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+:root { font-family: Inter, "Segoe UI", sans-serif; color: #e7edf4; background: #0a0d12; color-scheme: dark; }
+body { margin: 0; }
