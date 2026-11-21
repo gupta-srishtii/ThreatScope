@@ -1,15 +1,20 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Activity, BellRing, Blocks, BrainCircuit, ChevronRight, CircleHelp, Database, FileText, Fingerprint,
   LayoutDashboard, LockKeyhole, PanelLeftClose, Settings2, ShieldCheck, Upload } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Button } from './components/ui/button'
 import { Dialog } from './components/ui/dialog'
-import { Badge, Empty, ErrorState, Loading } from './components/ui/common'
+import { Badge, ErrorState, Loading } from './components/ui/common'
 import { WorkspaceProvider, useWorkspace } from './lib/workspace'
-import { Overview } from './pages/Overview'
-import { Detections } from './pages/Detections'
+import { SourcesDialog } from './components/SourcesDialog'
 import type { Dataset } from './lib/types'
 import { errorMessage, number } from './lib/utils'
+
+const Overview = lazy(() => import('./pages/Overview').then(m => ({ default: m.Overview })))
+const Detections = lazy(() => import('./pages/Detections').then(m => ({ default: m.Detections })))
+const Events = lazy(() => import('./pages/Events').then(m => ({ default: m.Events })))
+const AnomalyLab = lazy(() => import('./pages/AnomalyLab').then(m => ({ default: m.AnomalyLab })))
+const Reports = lazy(() => import('./pages/Reports').then(m => ({ default: m.Reports })))
 
 const navigation = [
   { name: 'Overview', icon: LayoutDashboard }, { name: 'Events', icon: Activity },
@@ -61,14 +66,12 @@ function Shell() {
           <div className="dataset-meta">{selected && <><Badge severity={selected.source === 'synthetic' ? 'synthetic' : 'info'}>{selected.source === 'synthetic' ? 'Synthetic dataset' : 'Imported dataset'}</Badge><span>{number(selected.event_count)} events</span></>}<span className="snapshot-label">Snapshot analysis</span></div>
         </div>
         {loading ? <Loading /> : error ? <ErrorState message={error} retry={() => setConnection(true)} /> : !selected ? <div className="welcome panel"><div className="welcome-orbit"><ShieldCheck size={52} /></div><span className="eyebrow">Your investigation starts here</span><h2>Turn events into understanding.</h2><p>Explore a labeled synthetic environment with authentication anomalies, activity bursts, and evidence you can investigate.</p><Button onClick={() => launch()} disabled={busy}><Blocks size={17} />{busy ? 'Preparing scenario…' : 'Launch demo workspace'}</Button><button className="text-button" onClick={() => setSources(true)}>Or import authorized CSV / JSON logs</button>{actionError && <p role="alert" className="form-error">{actionError}</p>}</div> : <AnimatePresence mode="wait"><motion.div key={page + selected.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .16 }}>
-          {page === 'Overview' ? <Overview navigate={navigate} /> : page === 'Detections' ? <Detections /> : <Empty title={`${page} workspace`}><p>Investigate {number(selected.event_count)} normalized events in this dataset.</p></Empty>}
+          <Suspense fallback={<Loading />}>{page === 'Overview' ? <Overview navigate={navigate} /> : page === 'Detections' ? <Detections /> : page === 'Events' ? <Events /> : page === 'Anomaly lab' ? <AnomalyLab /> : <Reports />}</Suspense>
         </motion.div></AnimatePresence>}
         <footer className="workspace-footer"><span><ShieldCheck size={13} />ThreatScope · Defensive analytics</span><span>Snapshot data · All event times UTC</span><span>v0.1.0</span></footer>
       </main>
     </div>
-    <Dialog open={sources} onOpenChange={setSources} title="Connect security data" description="Use synthetic scenarios or authorized local logs. No live collection.">
-      <div className="scenario-list">{[['mixed', 'Command center', 'Authentication, burst activity and off-hours anomalies.'], ['baseline', 'Quiet baseline', 'Benign business activity for comparison.']].map(([id, title, text]) => <button className="scenario-option" key={id} onClick={() => launch(id)} disabled={busy}><Blocks size={20} /><div><strong>{title}</strong><p>{text}</p></div><ChevronRight size={16} /></button>)}</div>{actionError && <p role="alert" className="form-error">{actionError}</p>}
-    </Dialog>
+    <SourcesDialog open={sources} onOpenChange={setSources} onLoaded={() => setPage('Overview')} />
     <Dialog open={connection} onOpenChange={setConnection} title="Workspace connection" description="Production workspaces require an API key. It is kept in memory and cleared when you reload.">
       <form onSubmit={e => { e.preventDefault(); connect(key); setKey(''); setConnection(false) }}><label className="field">Workspace API key<input type="password" autoComplete="off" value={key} onChange={e => setKey(e.target.value)} placeholder="Enter your workspace key" /></label><p className="connection-endpoint mono">Endpoint: {import.meta.env.VITE_API_BASE_URL || 'Same-origin /api'}</p><Button type="submit"><LockKeyhole size={16} />Connect workspace</Button></form>
     </Dialog>
