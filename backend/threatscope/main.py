@@ -117,6 +117,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(query_router)
     from threatscope.investigation_api import router as investigation_router
     app.include_router(investigation_router)
+    from threatscope.ml_api import router as ml_router
+    from threatscope.reports_api import router as reports_router
+    app.include_router(ml_router)
+    app.include_router(reports_router)
 
     @app.get("/api/health")
     def health():
