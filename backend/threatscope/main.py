@@ -2,13 +2,15 @@ from contextlib import asynccontextmanager
 from hmac import compare_digest
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from threatscope.config import Settings
+from threatscope.ingestion import MAX_UPLOAD_BYTES, ImportErrorDetail, parse_events
+from threatscope.security import RequestGuard
 from threatscope.storage import DatasetRow, database, save_dataset
 from threatscope.synthetic import SCENARIOS, generate
 
@@ -79,6 +81,20 @@ def delete_dataset(dataset_id: str, session: DB):
     session.commit()
 
 
+@router.post("/datasets/upload", status_code=201)
+def upload_dataset(file: UploadFile, session: DB):
+    check_quota(session)
+    try:
+        content = file.file.read(MAX_UPLOAD_BYTES + 1)
+        events = parse_events(content, file.filename or "")
+    except ImportErrorDetail as exc:
+        raise HTTPException(413 if len(content) > MAX_UPLOAD_BYTES else 422, str(exc)) from exc
+    finally:
+        file.file.close()
+    # A generic name avoids treating an untrusted filename as a path or UI markup.
+    return dataset_dict(save_dataset(session, "Imported security events", "upload", events))
+
+
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings()
 
@@ -93,6 +109,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                   docs_url="/docs" if settings.environment != "production" else None,
                   redoc_url=None, openapi_url="/openapi.json" if settings.environment != "production" else None)
     app.state.settings = settings
+    app.add_middleware(RequestGuard, origins=settings.origins)
     app.add_middleware(CORSMiddleware, allow_origins=settings.origins, allow_methods=["GET", "POST", "PATCH", "DELETE"],
                        allow_headers=["Content-Type", "X-API-Key"])
     app.include_router(router)
