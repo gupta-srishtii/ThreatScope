@@ -121,6 +121,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     from threatscope.reports_api import router as reports_router
     app.include_router(ml_router)
     app.include_router(reports_router)
+    from threatscope.evidence_api import router as evidence_router
+    app.include_router(evidence_router)
 
     @app.get("/api/health")
     def health():

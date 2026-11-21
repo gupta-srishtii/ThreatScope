@@ -7,6 +7,7 @@ import { Dialog } from './components/ui/dialog'
 import { Badge, Empty, ErrorState, Loading } from './components/ui/common'
 import { WorkspaceProvider, useWorkspace } from './lib/workspace'
 import { Overview } from './pages/Overview'
+import { Detections } from './pages/Detections'
 import type { Dataset } from './lib/types'
 import { errorMessage, number } from './lib/utils'
 
@@ -60,7 +61,7 @@ function Shell() {
           <div className="dataset-meta">{selected && <><Badge severity={selected.source === 'synthetic' ? 'synthetic' : 'info'}>{selected.source === 'synthetic' ? 'Synthetic dataset' : 'Imported dataset'}</Badge><span>{number(selected.event_count)} events</span></>}<span className="snapshot-label">Snapshot analysis</span></div>
         </div>
         {loading ? <Loading /> : error ? <ErrorState message={error} retry={() => setConnection(true)} /> : !selected ? <div className="welcome panel"><div className="welcome-orbit"><ShieldCheck size={52} /></div><span className="eyebrow">Your investigation starts here</span><h2>Turn events into understanding.</h2><p>Explore a labeled synthetic environment with authentication anomalies, activity bursts, and evidence you can investigate.</p><Button onClick={() => launch()} disabled={busy}><Blocks size={17} />{busy ? 'Preparing scenario…' : 'Launch demo workspace'}</Button><button className="text-button" onClick={() => setSources(true)}>Or import authorized CSV / JSON logs</button>{actionError && <p role="alert" className="form-error">{actionError}</p>}</div> : <AnimatePresence mode="wait"><motion.div key={page + selected.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .16 }}>
-          {page === 'Overview' ? <Overview navigate={navigate} /> : <Empty title={`${page} workspace`}><p>Investigate {number(selected.event_count)} normalized events in this dataset.</p></Empty>}
+          {page === 'Overview' ? <Overview navigate={navigate} /> : page === 'Detections' ? <Detections /> : <Empty title={`${page} workspace`}><p>Investigate {number(selected.event_count)} normalized events in this dataset.</p></Empty>}
         </motion.div></AnimatePresence>}
         <footer className="workspace-footer"><span><ShieldCheck size={13} />ThreatScope · Defensive analytics</span><span>Snapshot data · All event times UTC</span><span>v0.1.0</span></footer>
       </main>
