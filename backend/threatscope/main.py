@@ -113,6 +113,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(CORSMiddleware, allow_origins=settings.origins, allow_methods=["GET", "POST", "PATCH", "DELETE"],
                        allow_headers=["Content-Type", "X-API-Key"])
     app.include_router(router)
+    from threatscope.query_api import router as query_router
+    app.include_router(query_router)
 
     @app.get("/api/health")
     def health():
