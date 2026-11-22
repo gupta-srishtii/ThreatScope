@@ -55,3 +55,4 @@
 - Recorded milestone: audited frontend toolchain, readable source formatting, licensed 21st.dev grid, motion polish and keyboard-safe mobile navigation validated by lint, typecheck, interaction tests and production browser flows.
 - Recorded milestone: generated JSON/CSV demonstration imports round-trip through the real parser and assert expected rule outcomes; event contract documented.
 - Recorded milestone: CI definitions include isolated PostgreSQL, production-browser accessibility, artifact reproducibility, formatting and dependency audits; YAML syntax validated locally.
+- Recorded milestone: Vercel and Render/PostgreSQL configurations parsed successfully; private runtime setup, exact origins, billing review and rollback procedures documented.
