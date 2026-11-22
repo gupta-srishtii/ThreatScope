@@ -57,3 +57,10 @@
 - Recorded milestone: CI definitions include isolated PostgreSQL, production-browser accessibility, artifact reproducibility, formatting and dependency audits; YAML syntax validated locally.
 - Recorded milestone: Vercel and Render/PostgreSQL configurations parsed successfully; private runtime setup, exact origins, billing review and rollback procedures documented.
 - Recorded milestone: completed README, architecture/API catalog, detection/ML methodology, security model and inspected screenshots. Local implementation has more than 30 substantive commits; remote publication is the final repository action.
+
+## Repository publication
+
+- Pushed the complete 32-commit implementation to the verified `https://github.com/gupta-srishtii/ThreatScope.git` remote on `main`; local and remote commit IDs matched after push.
+- Final ordinary production build passed after the isolated browser build. Working tree was clean after publication.
+- GitHub Actions accepted the initial runs; remote execution was queued when publication was recorded. Local results above are verified; remote CI success is not yet claimed.
+- Hosting remains unprovisioned. Follow `DEPLOYMENT.md` for provider account access, runtime secrets, exact origins and review of paid resources.
