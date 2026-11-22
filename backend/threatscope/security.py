@@ -37,8 +37,12 @@ class RequestGuard:
         method = scope["method"]
 
         async def reject(status, message):
-            extra = {"X-Content-Type-Options": "nosniff", "Cache-Control": "no-store",
-                     "Referrer-Policy": "no-referrer", "X-Frame-Options": "DENY"}
+            extra = {
+                "X-Content-Type-Options": "nosniff",
+                "Cache-Control": "no-store",
+                "Referrer-Policy": "no-referrer",
+                "X-Frame-Options": "DENY",
+            }
             if status == 429:
                 extra["Retry-After"] = "60"
             await JSONResponse({"detail": message}, status_code=status, headers=extra)(scope, receive, send)

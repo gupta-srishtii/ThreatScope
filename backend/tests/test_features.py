@@ -10,7 +10,9 @@ def test_features_are_finite_ordered_and_label_independent():
     assert ordered == events
     assert list(frame.columns) == FEATURES
     assert np.isfinite(frame.to_numpy()).all()
-    changed = [e.model_copy(update={"label": "benign", "severity": "critical", "message": "changed"}) for e in events]
+    changed = [
+        e.model_copy(update={"label": "benign", "severity": "critical", "message": "changed"}) for e in events
+    ]
     assert features(changed)[1].equals(frame)
 
 

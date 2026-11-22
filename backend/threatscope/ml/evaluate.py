@@ -25,19 +25,32 @@ def evaluate() -> dict:
             ml_pred.extend(int(scores[e.id] > 0) for e in events)
 
     def metrics(pred):
-        precision, recall, f1, _ = precision_recall_fscore_support(truth, pred, average="binary", zero_division=0)
-        return {"precision": round(float(precision), 6), "recall": round(float(recall), 6),
-                "f1": round(float(f1), 6), "confusion_matrix": confusion_matrix(truth, pred, labels=[0, 1]).tolist()}
+        precision, recall, f1, _ = precision_recall_fscore_support(
+            truth, pred, average="binary", zero_division=0
+        )
+        return {
+            "precision": round(float(precision), 6),
+            "recall": round(float(recall), 6),
+            "f1": round(float(f1), 6),
+            "confusion_matrix": confusion_matrix(truth, pred, labels=[0, 1]).tolist(),
+        }
 
-    return {"protocol": "Held-out event-level synthetic evaluation; no test labels or test seeds in training",
-            "training_seeds": TRAIN_SEEDS, "test_seeds": TEST_SEEDS, "model_seed": MODEL_SEED,
-            "sklearn_version": sklearn.__version__, "datasets": len(TEST_SEEDS) * len(SCENARIOS),
-            "events": len(truth), "positive_labels": sum(truth),
-            "confusion_matrix_axes": "rows=true [benign,suspicious], columns=predicted [benign,suspicious]",
-            "rules": metrics(rule_pred), "isolation_forest": metrics(ml_pred),
-            "limitations": "Synthetic labels intentionally match demonstration rules. Rule performance is "
-            "optimistic by construction and does not estimate real-world efficacy. ML threshold was fixed "
-            "before evaluation. Correlated events are not independent samples; no confidence intervals claimed."}
+    return {
+        "protocol": "Held-out event-level synthetic evaluation; no test labels or test seeds in training",
+        "training_seeds": TRAIN_SEEDS,
+        "test_seeds": TEST_SEEDS,
+        "model_seed": MODEL_SEED,
+        "sklearn_version": sklearn.__version__,
+        "datasets": len(TEST_SEEDS) * len(SCENARIOS),
+        "events": len(truth),
+        "positive_labels": sum(truth),
+        "confusion_matrix_axes": "rows=true [benign,suspicious], columns=predicted [benign,suspicious]",
+        "rules": metrics(rule_pred),
+        "isolation_forest": metrics(ml_pred),
+        "limitations": "Synthetic labels intentionally match demonstration rules. Rule performance is "
+        "optimistic by construction and does not estimate real-world efficacy. ML threshold was fixed "
+        "before evaluation. Correlated events are not independent samples; no confidence intervals claimed.",
+    }
 
 
 if __name__ == "__main__":

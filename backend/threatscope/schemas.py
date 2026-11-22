@@ -41,7 +41,11 @@ class Event(BaseModel):
     @field_validator("timestamp", mode="before")
     @classmethod
     def iso_timestamp(cls, value):
-        if not isinstance(value, (str, datetime)) or isinstance(value, str) and ("T" not in value or len(value) > 64):
+        if (
+            not isinstance(value, (str, datetime))
+            or isinstance(value, str)
+            and ("T" not in value or len(value) > 64)
+        ):
             raise ValueError("timestamp must be an ISO 8601 datetime with a timezone")
         return value
 

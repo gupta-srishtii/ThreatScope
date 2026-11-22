@@ -59,36 +59,57 @@ def database(url: str):
         kwargs["poolclass"] = StaticPool
     engine = create_engine(url, **kwargs, pool_pre_ping=True)
     if url.startswith("sqlite"):
+
         @event.listens_for(engine, "connect")
         def enable_foreign_keys(connection, _):
             connection.execute("PRAGMA foreign_keys=ON")
+
     Base.metadata.create_all(engine)
     return engine, sessionmaker(engine, expire_on_commit=False)
 
 
 def save_dataset(session: Session, name: str, source: str, events: list[Event]) -> DatasetRow:
-    dataset = DatasetRow(id=str(uuid4()), name=name, source=source, created_at=datetime.now(timezone.utc),
-                         event_count=len(events))
+    dataset = DatasetRow(
+        id=str(uuid4()),
+        name=name,
+        source=source,
+        created_at=datetime.now(timezone.utc),
+        event_count=len(events),
+    )
     session.add(dataset)
     session.flush()
     for e in events:
-        session.add(EventRow(dataset_id=dataset.id, id=e.id, timestamp=e.timestamp, severity=e.severity.value,
-            action=e.action, outcome=e.outcome,
-            search_text=" ".join([e.id, e.user, e.source_ip, e.host, e.message]).lower(),
-            payload=e.model_dump(mode="json")))
+        session.add(
+            EventRow(
+                dataset_id=dataset.id,
+                id=e.id,
+                timestamp=e.timestamp,
+                severity=e.severity.value,
+                action=e.action,
+                outcome=e.outcome,
+                search_text=" ".join([e.id, e.user, e.source_ip, e.host, e.message]).lower(),
+                payload=e.model_dump(mode="json"),
+            )
+        )
     for a in analyze(events):
-        session.add(AlertRow(dataset_id=dataset.id, id=a.id, status=a.status, payload=a.model_dump(mode="json")))
+        session.add(
+            AlertRow(dataset_id=dataset.id, id=a.id, status=a.status, payload=a.model_dump(mode="json"))
+        )
     session.commit()
     return dataset
 
 
 def load_events(session: Session, dataset_id: str) -> list[Event]:
-    rows = session.scalars(select(EventRow).where(EventRow.dataset_id == dataset_id)
-                           .order_by(EventRow.timestamp, EventRow.id))
+    rows = session.scalars(
+        select(EventRow).where(EventRow.dataset_id == dataset_id).order_by(EventRow.timestamp, EventRow.id)
+    )
     return [Event.model_validate(row.payload) for row in rows]
 
 
 def load_alerts(session: Session, dataset_id: str) -> list[Alert]:
     rows = session.scalars(select(AlertRow).where(AlertRow.dataset_id == dataset_id))
-    return sorted([Alert.model_validate({**r.payload, "status": r.status}) for r in rows],
-                  key=lambda a: (a.timestamp, a.id), reverse=True)
+    return sorted(
+        [Alert.model_validate({**r.payload, "status": r.status}) for r in rows],
+        key=lambda a: (a.timestamp, a.id),
+        reverse=True,
+    )

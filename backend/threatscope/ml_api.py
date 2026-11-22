@@ -3,7 +3,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends
 
-from threatscope.main import DB, dataset_or_404, require_access
+from threatscope.dependencies import DB, dataset_or_404, require_access
 from threatscope.ml.model import score
 from threatscope.storage import load_events
 

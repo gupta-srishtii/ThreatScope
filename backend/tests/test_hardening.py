@@ -39,8 +39,18 @@ def test_render_postgres_urls_use_installed_driver():
 
 
 def test_cors_preflight_allows_only_explicit_origins(client):
-    accepted = client.options('/api/datasets', headers={"Origin": "http://localhost:5173", "Access-Control-Request-Method": "GET", "Access-Control-Request-Headers": "X-API-Key"})
+    accepted = client.options(
+        "/api/datasets",
+        headers={
+            "Origin": "http://localhost:5173",
+            "Access-Control-Request-Method": "GET",
+            "Access-Control-Request-Headers": "X-API-Key",
+        },
+    )
     assert accepted.status_code == 200
-    assert accepted.headers['access-control-allow-origin'] == 'http://localhost:5173'
-    denied = client.options('/api/datasets', headers={"Origin": "https://untrusted.example", "Access-Control-Request-Method": "GET"})
-    assert 'access-control-allow-origin' not in denied.headers
+    assert accepted.headers["access-control-allow-origin"] == "http://localhost:5173"
+    denied = client.options(
+        "/api/datasets",
+        headers={"Origin": "https://untrusted.example", "Access-Control-Request-Method": "GET"},
+    )
+    assert "access-control-allow-origin" not in denied.headers

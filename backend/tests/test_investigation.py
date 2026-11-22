@@ -2,8 +2,12 @@ def test_notes_and_status_persist_and_scope(client, dataset):
     path = f"/api/datasets/{dataset['id']}"
     alert = client.get(path + "/alerts").json()[0]
     target = path + f"/alerts/{alert['id']}"
-    assert client.post(target + "/notes", json={"body": "Verified with synthetic account owner"}).status_code == 201
+    assert (
+        client.post(target + "/notes", json={"body": "Verified with synthetic account owner"}).status_code
+        == 201
+    )
     assert len(client.get(target + "/notes").json()) == 1
+    assert client.get(target + "/notes").json()[0]["created_at"].endswith(("Z", "+00:00"))
     assert client.patch(target, json={"status": "investigating"}).json()["status"] == "investigating"
     assert client.get(path + "/metrics").json()["open_alerts"] == 4
     assert client.patch(target, json={"status": "resolved"}).status_code == 200

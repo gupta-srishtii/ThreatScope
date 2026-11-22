@@ -9,8 +9,13 @@ def test_seeded_complete_scenarios():
         assert a == generate(scenario)
         assert len({e.id for e in a}) == len(a)
         assert a == sorted(a, key=lambda e: (e.timestamp, e.id))
-        assert all(any(ip_address(e.source_ip) in ip_network(n) for n in
-                       ["192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24"]) for e in a)
+        assert all(
+            any(
+                ip_address(e.source_ip) in ip_network(n)
+                for n in ["192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24"]
+            )
+            for e in a
+        )
 
 
 def test_baseline_has_no_suspicious_labels():

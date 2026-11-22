@@ -8,12 +8,25 @@ from threatscope.synthetic import generate
 
 def test_json_roundtrip():
     events = generate("baseline", count=20)
-    assert parse_events(json.dumps([e.model_dump(mode="json") for e in events]).encode(), "sample.json") == events
+    assert (
+        parse_events(json.dumps([e.model_dump(mode="json") for e in events]).encode(), "sample.json")
+        == events
+    )
 
 
-@pytest.mark.parametrize("data,name", [(b"[]", "x.json"), (b"{}", "x.json"), (b"[", "x.json"),
-    (b"\xff", "x.csv"), (b"print('x')", "x.py"), (b"id,id\na,b", "x.csv"),
-    (b"id,user\na,b,c", "x.csv"), (b"x" * (MAX_UPLOAD_BYTES + 1), "x.json")])
+@pytest.mark.parametrize(
+    "data,name",
+    [
+        (b"[]", "x.json"),
+        (b"{}", "x.json"),
+        (b"[", "x.json"),
+        (b"\xff", "x.csv"),
+        (b"print('x')", "x.py"),
+        (b"id,id\na,b", "x.csv"),
+        (b"id,user\na,b,c", "x.csv"),
+        (b"x" * (MAX_UPLOAD_BYTES + 1), "x.json"),
+    ],
+)
 def test_rejects_malformed(data, name):
     with pytest.raises(ImportErrorDetail):
         parse_events(data, name)

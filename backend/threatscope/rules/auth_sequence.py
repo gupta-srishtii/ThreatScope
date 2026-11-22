@@ -17,11 +17,18 @@ def detect(events: list[Event]) -> list[Alert]:
             queue.append(event)
         elif event.outcome == "success":
             if len(queue) >= 5:
-                results.append(alert("AUTH-002", "Successful login after repeated failures", Severity.critical,
-                    f"{event.user} · {event.source_ip}", [*queue, event],
-                    f"A successful authentication followed {len(queue)} failures for the same user and "
-                    "source in 5 minutes. Account compromise is a hypothesis requiring verification.",
-                    "Verify the session with the account owner; inspect MFA and session history.",
-                    {"preceding_failures": len(queue), "window_seconds": 300}))
+                results.append(
+                    alert(
+                        "AUTH-002",
+                        "Successful login after repeated failures",
+                        Severity.critical,
+                        f"{event.user} · {event.source_ip}",
+                        [*queue, event],
+                        f"A successful authentication followed {len(queue)} failures for the same user and "
+                        "source in 5 minutes. Account compromise is a hypothesis requiring verification.",
+                        "Verify the session with the account owner; inspect MFA and session history.",
+                        {"preceding_failures": len(queue), "window_seconds": 300},
+                    )
+                )
             queue.clear()
     return results

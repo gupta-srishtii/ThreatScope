@@ -18,11 +18,12 @@ _training_lock = Lock()
 def trained_model():
     frames = [features(generate("baseline", seed=seed))[1] for seed in TRAIN_SEEDS]
     training = pd.concat(frames, ignore_index=True)
-    model = IsolationForest(n_estimators=160, max_samples=256, contamination=.025,
-                            random_state=MODEL_SEED, n_jobs=1)
+    model = IsolationForest(
+        n_estimators=160, max_samples=256, contamination=0.025, random_state=MODEL_SEED, n_jobs=1
+    )
     model.fit(training)
     center = training.median()
-    spread = (training.quantile(.75) - training.quantile(.25)).clip(lower=1)
+    spread = (training.quantile(0.75) - training.quantile(0.25)).clip(lower=1)
     return model, center, spread
 
 
@@ -39,15 +40,37 @@ def score(events: list[Event]) -> dict:
             continue
         row = frame.iloc[index]
         deviations = ((row - center).abs() / spread).sort_values(ascending=False)
-        evidence = [{"feature": key, "value": round(float(row[key]), 4),
-                     "baseline_median": round(float(center[key]), 4)} for key in deviations.index[:3]]
-        candidates.append({"event_id": ordered[index].id, "timestamp": ordered[index].timestamp.isoformat(),
-                           "user": ordered[index].user, "source_ip": ordered[index].source_ip,
-                           "score": round(float(scores[index]), 6), "features": evidence})
-    return {"candidate_count": len(candidates), "results": candidates[:30],
-            "scores": [{"event_id": e.id, "score": float(s)} for e, s in zip(ordered, scores, strict=True)],
-            "model": {"algorithm": "Isolation Forest", "seed": MODEL_SEED, "training_seeds": TRAIN_SEEDS,
-                      "training_events": len(TRAIN_SEEDS) * 480, "contamination": .025,
-                      "features": FEATURES, "threshold": 0},
-            "limitation": "Unusual activity is not proof of malicious intent. This model is trained only on "
-                          "synthetic data. Feature deviations are context, not causal feature attribution."}
+        evidence = [
+            {
+                "feature": key,
+                "value": round(float(row[key]), 4),
+                "baseline_median": round(float(center[key]), 4),
+            }
+            for key in deviations.index[:3]
+        ]
+        candidates.append(
+            {
+                "event_id": ordered[index].id,
+                "timestamp": ordered[index].timestamp.isoformat(),
+                "user": ordered[index].user,
+                "source_ip": ordered[index].source_ip,
+                "score": round(float(scores[index]), 6),
+                "features": evidence,
+            }
+        )
+    return {
+        "candidate_count": len(candidates),
+        "results": candidates[:30],
+        "scores": [{"event_id": e.id, "score": float(s)} for e, s in zip(ordered, scores, strict=True)],
+        "model": {
+            "algorithm": "Isolation Forest",
+            "seed": MODEL_SEED,
+            "training_seeds": TRAIN_SEEDS,
+            "training_events": len(TRAIN_SEEDS) * 480,
+            "contamination": 0.025,
+            "features": FEATURES,
+            "threshold": 0,
+        },
+        "limitation": "Unusual activity is not proof of malicious intent. This model is trained only on "
+        "synthetic data. Feature deviations are context, not causal feature attribution.",
+    }

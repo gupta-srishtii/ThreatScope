@@ -13,10 +13,17 @@ def detect(events: list[Event]) -> list[Alert]:
     for (ip, user), group in sorted(groups.items()):
         window = densest_window(group, 300)
         if len(window) >= 5:
-            results.append(alert("AUTH-001", "Repeated authentication failures", Severity.high,
-                f"{user} · {ip}", window,
-                f"{len(window)} failed logins for {user} from {ip} within 5 minutes. "
-                "This may indicate password guessing or a misconfigured client.",
-                "Confirm the user's activity and review identity-provider logs before taking action.",
-                {"failure_count": len(window), "threshold": 5, "window_seconds": 300}))
+            results.append(
+                alert(
+                    "AUTH-001",
+                    "Repeated authentication failures",
+                    Severity.high,
+                    f"{user} · {ip}",
+                    window,
+                    f"{len(window)} failed logins for {user} from {ip} within 5 minutes. "
+                    "This may indicate password guessing or a misconfigured client.",
+                    "Confirm the user's activity and review identity-provider logs before taking action.",
+                    {"failure_count": len(window), "threshold": 5, "window_seconds": 300},
+                )
+            )
     return results

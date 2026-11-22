@@ -24,29 +24,71 @@ def generate(scenario: str = "mixed", seed: int = 42, count: int = 480) -> list[
     events: list[Event] = []
 
     def add(timestamp, ip, user, action="login", outcome="success", label="benign", **kw):
-        events.append(Event(id=f"evt-{seed}-{len(events):05d}", timestamp=timestamp, source_ip=ip,
-                            user=user, host=kw.pop("host", "gateway-01"), action=action,
-                            outcome=outcome, label=label, **kw))
+        events.append(
+            Event(
+                id=f"evt-{seed}-{len(events):05d}",
+                timestamp=timestamp,
+                source_ip=ip,
+                user=user,
+                host=kw.pop("host", "gateway-01"),
+                action=action,
+                outcome=outcome,
+                label=label,
+                **kw,
+            )
+        )
 
     for _ in range(count):
         action = rng.choice(["login", "file_access", "network_connection", "process_start"])
-        add(start + timedelta(seconds=rng.randrange(8 * 3600)), f"192.0.2.{rng.randint(1, 24)}",
-            rng.choice(["a.chen", "s.patel", "j.rivera", "m.brooks", "service-ci"]), action,
-            "failure" if rng.random() < .025 and action == "login" else "success",
-            bytes_sent=rng.randint(200, 25000), host=rng.choice(["gateway-01", "app-02", "vault-01"]),
-            message="Synthetic business activity")
+        add(
+            start + timedelta(seconds=rng.randrange(8 * 3600)),
+            f"192.0.2.{rng.randint(1, 24)}",
+            rng.choice(["a.chen", "s.patel", "j.rivera", "m.brooks", "service-ci"]),
+            action,
+            "failure" if rng.random() < 0.025 and action == "login" else "success",
+            bytes_sent=rng.randint(200, 25000),
+            host=rng.choice(["gateway-01", "app-02", "vault-01"]),
+            message="Synthetic business activity",
+        )
     if scenario in ("mixed", "authentication"):
         for i in range(9):
-            add(start + timedelta(hours=6, seconds=i * 15), "198.51.100.42", "admin.demo",
-                outcome="failure", label="suspicious", severity="medium", message="Synthetic failed authentication")
-        add(start + timedelta(hours=6, minutes=3), "198.51.100.42", "admin.demo",
-            label="suspicious", severity="high", message="Synthetic successful login after failures")
+            add(
+                start + timedelta(hours=6, seconds=i * 15),
+                "198.51.100.42",
+                "admin.demo",
+                outcome="failure",
+                label="suspicious",
+                severity="medium",
+                message="Synthetic failed authentication",
+            )
+        add(
+            start + timedelta(hours=6, minutes=3),
+            "198.51.100.42",
+            "admin.demo",
+            label="suspicious",
+            severity="high",
+            message="Synthetic successful login after failures",
+        )
     if scenario in ("mixed", "burst"):
         for i in range(36):
-            add(start + timedelta(hours=5, seconds=i), "203.0.113.77", "service-export", "file_access",
-                label="suspicious", bytes_sent=8000000 + i * 10000, severity="medium",
-                message="Synthetic concentrated file access", host="vault-01")
+            add(
+                start + timedelta(hours=5, seconds=i),
+                "203.0.113.77",
+                "service-export",
+                "file_access",
+                label="suspicious",
+                bytes_sent=8000000 + i * 10000,
+                severity="medium",
+                message="Synthetic concentrated file access",
+                host="vault-01",
+            )
     if scenario in ("mixed", "off_hours"):
-        add(start.replace(hour=2, minute=14), "198.51.100.91", "admin.demo",
-            label="suspicious", severity="medium", message="Synthetic off-hours authentication")
+        add(
+            start.replace(hour=2, minute=14),
+            "198.51.100.91",
+            "admin.demo",
+            label="suspicious",
+            severity="medium",
+            message="Synthetic off-hours authentication",
+        )
     return sorted(events, key=lambda e: (e.timestamp, e.id))

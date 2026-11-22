@@ -14,7 +14,10 @@ def test_burst_threshold():
 def test_business_hour_boundaries():
     event = generate("off_hours")[0]
     for hour, expected in [(5, 1), (6, 0), (21, 0), (22, 1)]:
-        assert len(off_hours([event.model_copy(update={"timestamp": event.timestamp.replace(hour=hour)})])) == expected
+        assert (
+            len(off_hours([event.model_copy(update={"timestamp": event.timestamp.replace(hour=hour)})]))
+            == expected
+        )
 
 
 def test_combined_rules_and_benign():
