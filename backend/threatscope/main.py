@@ -3,7 +3,9 @@ from hmac import compare_digest
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request, UploadFile
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -25,7 +27,7 @@ DB = Annotated[Session, Depends(get_session)]
 
 def require_access(request: Request):
     key = request.app.state.settings.api_key
-    if key and not compare_digest(request.headers.get("X-API-Key", ""), key):
+    if key and not compare_digest(request.headers.get("X-API-Key", "").encode(), key.encode()):
         raise HTTPException(401, "A valid workspace API key is required")
 
 
@@ -49,7 +51,7 @@ def dataset_dict(row: DatasetRow):
 class ScenarioInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     scenario: str = "mixed"
-    seed: int = Field(default=42, ge=0, le=1000000)
+    seed: int = Field(default=42, ge=0, le=1000000, strict=True)
 
 
 router = APIRouter(prefix="/api", dependencies=[Depends(require_access)])
@@ -109,6 +111,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                   docs_url="/docs" if settings.environment != "production" else None,
                   redoc_url=None, openapi_url="/openapi.json" if settings.environment != "production" else None)
     app.state.settings = settings
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(request, error):
+        errors = [{"loc": item["loc"], "type": item["type"], "msg": item["msg"]} for item in error.errors()]
+        return JSONResponse(status_code=422, content={"detail": errors})
+
+    @app.middleware("http")
+    async def response_headers(request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Frame-Options"] = "DENY"
+        return response
     app.add_middleware(RequestGuard, origins=settings.origins)
     app.add_middleware(CORSMiddleware, allow_origins=settings.origins, allow_methods=["GET", "POST", "PATCH", "DELETE"],
                        allow_headers=["Content-Type", "X-API-Key"])

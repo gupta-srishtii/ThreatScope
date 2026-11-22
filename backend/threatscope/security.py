@@ -12,6 +12,23 @@ class RequestGuard:
     def __init__(self, app, origins: list[str], max_body: int = MAX_UPLOAD_BYTES + 65536):
         self.app, self.origins, self.max_body = app, origins, max_body
         self.requests = defaultdict(deque)
+        self.all_requests = defaultdict(deque)
+
+    def allow_request(self, address, now, *, writes=False):
+        store = self.requests if writes else self.all_requests
+        if address not in store and len(store) >= 4096:
+            expired = [key for key, queue in store.items() if not queue or queue[-1] <= now - 60]
+            for key in expired:
+                del store[key]
+            if len(store) >= 4096:
+                return False
+        queue = store[address]
+        while queue and queue[0] <= now - 60:
+            queue.popleft()
+        if len(queue) >= (60 if writes else 240):
+            return False
+        queue.append(now)
+        return True
 
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
@@ -20,26 +37,25 @@ class RequestGuard:
         method = scope["method"]
 
         async def reject(status, message):
-            await JSONResponse({"detail": message}, status_code=status)(scope, receive, send)
+            extra = {"X-Content-Type-Options": "nosniff", "Cache-Control": "no-store",
+                     "Referrer-Policy": "no-referrer", "X-Frame-Options": "DENY"}
+            if status == 429:
+                extra["Retry-After"] = "60"
+            await JSONResponse({"detail": message}, status_code=status, headers=extra)(scope, receive, send)
+
+        address = (scope.get("client") or ("unknown",))[0]
+        now = monotonic()
+        if scope["path"].startswith("/api/") and scope["path"] != "/api/health":
+            if not self.allow_request(address, now):
+                return await reject(429, "Request rate limit exceeded; retry in one minute")
 
         if method in ("POST", "PATCH", "DELETE"):
             origin = headers.get(b"origin", b"").decode("latin1")
             if origin and origin not in self.origins:
                 return await reject(403, "Request origin is not allowed")
             # Single-process limiter, independent of spoofable forwarded headers.
-            address = (scope.get("client") or ("unknown",))[0]
-            now = monotonic()
-            queue = self.requests[address]
-            while queue and queue[0] <= now - 60:
-                queue.popleft()
-            if len(queue) >= 60:
+            if not self.allow_request(address, now, writes=True):
                 return await reject(429, "Write rate limit exceeded; retry in one minute")
-            queue.append(now)
-            # Keep client accounting bounded under many distinct source addresses.
-            if len(self.requests) > 4096:
-                self.requests = defaultdict(deque, {k: v for k, v in self.requests.items() if v and v[-1] > now - 60})
-                if len(self.requests) > 4096:
-                    return await reject(429, "Server write capacity reached")
         try:
             length = int(headers.get(b"content-length", b"0"))
             if length < 0:

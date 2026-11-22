@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,6 +10,14 @@ class Settings(BaseSettings):
     environment: Literal["development", "production", "test"] = "development"
     api_key: str = ""
     allowed_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+
+    @field_validator("database_url")
+    @classmethod
+    def postgres_driver(cls, value: str) -> str:
+        for prefix in ("postgres://", "postgresql://"):
+            if value.startswith(prefix):
+                return "postgresql+psycopg://" + value[len(prefix):]
+        return value
 
     @property
     def origins(self) -> list[str]:

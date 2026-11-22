@@ -15,6 +15,8 @@ __pycache__/
 !.env.example
 coverage/
 htmlcov/
+.coverage
+coverage.xml
 test-results/
 playwright-report/
 .playwright/

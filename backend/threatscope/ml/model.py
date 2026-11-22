@@ -1,4 +1,5 @@
 from functools import lru_cache
+from threading import Lock
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,7 @@ from threatscope.synthetic import generate
 
 TRAIN_SEEDS = (17, 29, 43, 61)
 MODEL_SEED = 42
+_training_lock = Lock()
 
 
 @lru_cache(maxsize=1)
@@ -28,7 +30,8 @@ def score(events: list[Event]) -> dict:
     ordered, frame = features(events)
     if frame.empty:
         return {"candidate_count": 0, "results": [], "scores": []}
-    model, center, spread = trained_model()
+    with _training_lock:
+        model, center, spread = trained_model()
     scores = -model.decision_function(frame)
     candidates = []
     for index in np.argsort(-scores, kind="stable"):

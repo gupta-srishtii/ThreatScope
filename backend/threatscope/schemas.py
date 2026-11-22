@@ -38,6 +38,13 @@ class Event(BaseModel):
             raise ValueError("timestamp must include a timezone")
         return value.astimezone(timezone.utc)
 
+    @field_validator("timestamp", mode="before")
+    @classmethod
+    def iso_timestamp(cls, value):
+        if not isinstance(value, (str, datetime)) or isinstance(value, str) and ("T" not in value or len(value) > 64):
+            raise ValueError("timestamp must be an ISO 8601 datetime with a timezone")
+        return value
+
     @field_validator("source_ip")
     @classmethod
     def valid_ip(cls, value: str) -> str:
