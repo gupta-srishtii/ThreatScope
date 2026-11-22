@@ -1,0 +1,13 @@
+node_modules
+dist
+.venv
+.python
+.uv-cache
+.npm-cache
+.playwright
+.logs
+playwright-report
+test-results
+package-lock.json
+uv.lock
+samples

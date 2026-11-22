@@ -9,14 +9,22 @@ test('button forwards disabled state and supports keyboard activation', async ()
   await userEvent.tab()
   await userEvent.keyboard('{Enter}')
   expect(action).toHaveBeenCalledTimes(1)
-  rerender(<Button disabled onClick={action}>Investigate</Button>)
+  rerender(
+    <Button disabled onClick={action}>
+      Investigate
+    </Button>,
+  )
   await userEvent.click(screen.getByRole('button'))
   expect(action).toHaveBeenCalledTimes(1)
 })
 
 test('dialog exposes its accessible name and closes on escape', async () => {
   const close = vi.fn()
-  render(<Dialog open onOpenChange={close} title="Investigation" description="Review evidence"><p>Evidence</p></Dialog>)
+  render(
+    <Dialog open onOpenChange={close} title="Investigation" description="Review evidence">
+      <p>Evidence</p>
+    </Dialog>,
+  )
   expect(screen.getByRole('dialog', { name: 'Investigation' })).toBeInTheDocument()
   await userEvent.keyboard('{Escape}')
   expect(close).toHaveBeenCalledWith(false)

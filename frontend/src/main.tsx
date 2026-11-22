@@ -7,7 +7,12 @@ import './investigation.css'
 import './events.css'
 import './sources.css'
 import './analysis.css'
+import './polish.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode><MotionConfig reducedMotion="user"><App /></MotionConfig></React.StrictMode>,
+  <React.StrictMode>
+    <MotionConfig reducedMotion="user">
+      <App />
+    </MotionConfig>
+  </React.StrictMode>,
 )
