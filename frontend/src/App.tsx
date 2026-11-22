@@ -47,7 +47,7 @@ function Shell() {
       <a className="brand" href="#" onClick={e => { e.preventDefault(); navigate('Overview') }}><span className="brand-mark"><ShieldCheck size={25} /></span><span>ThreatScope<span className="brand-sub">SECURITY WORKSPACE</span></span></a>
       <div className="workspace-label"><span className="workspace-avatar">TS</span><div>Analyst workspace<span>Local analysis environment</span></div><LockKeyhole size={14} /></div>
       <div className="nav-label eyebrow">Workspace</div>
-      <nav>{navigation.map(({ name, icon: Icon }) => <button key={name} onClick={() => navigate(name)} className={`nav-item ${page === name ? 'nav-active' : ''}`} aria-current={page === name ? 'page' : undefined}><Icon size={18} /><span>{name}</span>{name === 'Anomaly lab' && <span className="nav-tag">ML</span>}</button>)}</nav>
+      <nav>{navigation.map(({ name, icon: Icon }) => <button key={name} onClick={() => navigate(name)} className={`nav-item ${page === name ? 'nav-active' : ''}`} aria-current={page === name ? 'page' : undefined}><Icon size={18} /><span>{name}</span>{name === 'Anomaly lab' && <span className="nav-tag" aria-hidden="true">ML</span>}</button>)}</nav>
       <div className="nav-label eyebrow">Manage</div>
       <button className="nav-item" onClick={() => setSources(true)}><Database size={18} />Data sources</button>
       <button className="nav-item" onClick={() => setConnection(true)}><Settings2 size={18} />Connection</button>
