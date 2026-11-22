@@ -30,7 +30,7 @@ jobs:
     env:
       TEST_POSTGRES_URL: postgresql+psycopg://postgres:postgres@localhost:5432/threatscope_test
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           version: '0.12.19'
@@ -55,7 +55,7 @@ jobs:
   frontend-and-browser:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
@@ -84,7 +84,7 @@ jobs:
   dependency-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
