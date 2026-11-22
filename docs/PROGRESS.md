@@ -46,9 +46,9 @@
 
 - Production Chromium suite: **6/6 passed**. It verified scenario launch/chart controls; evidence → note → status → JSON report; event filtering/inspection; malformed and valid imports; real optional ML scoring; mobile overflow/reduced motion, navigation Escape/focus behavior and zero axe WCAG A/AA findings in the overview and investigation dialog.
 - Frontend: **9/9 interaction tests passed**, ESLint with zero warnings, TypeScript typecheck, Prettier check and production build passed. Pages are split into separate bundles, with no oversized-chunk warning.
-- Backend: **61 passed, one explicitly skipped PostgreSQL integration test**; 97% statement coverage before the final dependency extraction. Python lint/format checks pass. Evaluation artifact regeneration produced no drift.
+- Backend: **61 passed, one explicitly skipped PostgreSQL integration test**; final statement coverage **97.18%**. Python lint/format checks pass. Evaluation artifact regeneration produced no drift.
 - npm audit and pip-audit report **no known vulnerabilities** for the checked dependencies at verification time; this is not a guarantee against unknown issues.
-- Actual desktop/mobile screenshots were captured and inspected. The mobile full-page screenshot exposed an off-screen skip-link capture artifact; its hidden state now uses opacity while preserving keyboard focusability, and the mobile flow is being rechecked.
+- Actual desktop/mobile screenshots were captured and inspected. The mobile full-page screenshot exposed an off-screen skip-link capture artifact; its hidden state now uses opacity while preserving keyboard focusability. The mobile browser flow passed again, including an explicit investigation-dialog focus restoration assertion.
 - All requested implementation phases are complete locally. External hosting/account configuration remains documented in `DEPLOYMENT.md`; no paid resources have been provisioned.
 
 - Recorded milestone: API routers now share dependencies without entry-point import cycles; UTC response offsets and database health checks verified by the 61-test suite.
@@ -56,3 +56,4 @@
 - Recorded milestone: generated JSON/CSV demonstration imports round-trip through the real parser and assert expected rule outcomes; event contract documented.
 - Recorded milestone: CI definitions include isolated PostgreSQL, production-browser accessibility, artifact reproducibility, formatting and dependency audits; YAML syntax validated locally.
 - Recorded milestone: Vercel and Render/PostgreSQL configurations parsed successfully; private runtime setup, exact origins, billing review and rollback procedures documented.
+- Recorded milestone: completed README, architecture/API catalog, detection/ML methodology, security model and inspected screenshots. Local implementation has more than 30 substantive commits; remote publication is the final repository action.
