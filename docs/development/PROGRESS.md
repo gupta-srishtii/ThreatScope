@@ -2,7 +2,7 @@
 
 - Workspace: empty repository; no pre-existing work to preserve. Intended origin verified from local Git configuration: `https://github.com/gupta-srishtii/ThreatScope.git`.
 - Tooling: Node 24, npm 11, Git and uv available. Python installation and network access require verification. Initial restricted-network remote check could not connect.
-- Plan: see [ROADMAP.md](ROADMAP.md). Implementation begins immediately.
+- Plan: see [ROADMAP.md](../product/ROADMAP.md). Implementation begins immediately.
 
 ## Backend implementation
 
@@ -64,3 +64,7 @@
 - Final ordinary production build passed after the isolated browser build. Working tree was clean after publication.
 - GitHub Actions accepted the initial runs; remote execution was queued when publication was recorded. Local results above are verified; remote CI success is not yet claimed.
 - Hosting remains unprovisioned. Follow `DEPLOYMENT.md` for provider account access, runtime secrets, exact origins and review of paid resources.
+
+## Repository refactor — November 23, 2026
+
+Audit recorded before changes on refactor/repository-structure. Preserved package/ASGI entry point, model parameters, rule thresholds, test contents and fixture values. Added frontend workspace and domain package boundaries; moved 34 files and categorized docs. No feature rebuild or cache deletion. Verification in progress; see REFACTOR_REPORT.md for exact moves and final evidence.

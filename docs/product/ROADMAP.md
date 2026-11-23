@@ -44,7 +44,7 @@ Build a defensive, single-workspace security analytics platform. Synthetic data 
 29. CI, dependency/security checks and deployment configuration.
 30. Operations, detection documentation and final verification.
 
-Each unit is committed when its applicable checks pass. Follow-up fixes get their own honest commits. Maintain `docs/PROGRESS.md` and `CHANGELOG.md`; never manufacture history to meet a count.
+Each unit is committed when its applicable checks pass. Follow-up fixes get their own honest commits. Maintain `docs/development/PROGRESS.md` and `CHANGELOG.md`; never manufacture history to meet a count.
 
 ## Acceptance checks
 

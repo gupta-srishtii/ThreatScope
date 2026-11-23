@@ -15,7 +15,7 @@ The blueprint uses the current [Render Blueprint schema](https://render.com/docs
 
 ## Frontend on Vercel
 
-1. Import the same GitHub repository. Use the repository root, Node 24, Vite, `npm ci`, `npm run build`, and output `dist`. `vercel.json` sets the build and browser security headers.
+1. Import the same GitHub repository. Use the repository root, Node 24, the root npm workspace, `npm ci`, `npm run build`, and output `frontend/dist`. `vercel.json` sets the build and browser security headers.
 2. Set the public `VITE_API_BASE_URL` to the Render HTTPS origin, **without** `/api` or a trailing slash. Rebuild after changing it. No API key belongs in Vercel's build-time environment.
 3. Record the final HTTPS URL, set that exact URL in Render's `ALLOWED_ORIGINS`, and redeploy/restart the backend as required.
 4. Open **Connection** in ThreatScope and enter the backend workspace key. It stays only in JavaScript memory and is cleared on reload; there is no local-storage or cookie persistence.

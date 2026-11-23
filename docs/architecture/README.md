@@ -10,6 +10,10 @@ frontend/src/
   pages/            overview, event explorer, detections, anomaly lab, reports
   lib/              typed API client, workspace context, abortable resources, formatters
 backend/threatscope/
+  api/              HTTP routers
+  models/           schemas and persistence
+  services/         parsing and synthetic generation
+  detection/        explainable rules
   main.py           application factory, lifecycle, workspace/import routes
   dependencies.py   scoped sessions, access checks, dataset lookup and quotas
   schemas.py        normalized Pydantic event/alert contracts
@@ -20,8 +24,8 @@ backend/threatscope/
   ml/               causal features, seeded model training, held-out evaluation
   *_api.py          query, investigation, evidence, ML and report routers
 backend/tests/      schema, parser, rule, feature/model, API and database checks
-e2e/                production-browser synthetic investigation workflows
-samples/            validated synthetic JSON/CSV imports
+frontend/tests/e2e/ production-browser synthetic investigation workflows
+sample-data/        validated synthetic JSON/CSV imports
 docs/               contracts, methodology, evidence and deployment runbooks
 ```
 
@@ -79,4 +83,4 @@ Validation errors omit raw input values. Upload failures report a row and field 
 
 ## Operational boundaries
 
-One shared API key grants full workspace access. Limits are in-process and quota checks are not strict across concurrent writes. There is no durable task queue, model registry, federated identity, tenant isolation, author audit trail or continuous ingestion. Worker restarts retrain the same synthetic baseline, and changing dependencies can change model outputs. [Deployment](DEPLOYMENT.md), [detection](DETECTIONS.md) and [ML](ML.md) documents explain these limits and required external setup.
+One shared API key grants full workspace access. Limits are in-process and quota checks are not strict across concurrent writes. There is no durable task queue, model registry, federated identity, tenant isolation, author audit trail or continuous ingestion. Worker restarts retrain the same synthetic baseline, and changing dependencies can change model outputs. [Deployment](../deployment/README.md), [detection](../detection/README.md) and [ML](../ml/README.md) documents explain these limits and required external setup.

@@ -31,4 +31,4 @@ Notes and statuses persist in the selected database. Notes have no author field 
 
 ## Coverage boundaries
 
-There are no geolocation, impossible-travel, threat-intelligence, malware, credential validation, network scanning or exploitation features. Cross-user password spraying is not covered by the same-user authentication rules. Missing, aggregated, delayed or inaccurate source logs can hide or distort patterns. Absence of findings is not evidence of safety. See [the ML methodology](ML.md) for the optional anomaly layer.
+There are no geolocation, impossible-travel, threat-intelligence, malware, credential validation, network scanning or exploitation features. Cross-user password spraying is not covered by the same-user authentication rules. Missing, aggregated, delayed or inaccurate source logs can hide or distort patterns. Absence of findings is not evidence of safety. See [the ML methodology](../ml/README.md) for the optional anomaly layer.
