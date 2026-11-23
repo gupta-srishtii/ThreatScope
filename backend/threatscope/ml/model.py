@@ -6,8 +6,8 @@ import pandas as pd
 from sklearn.ensemble import IsolationForest
 
 from threatscope.ml.features import FEATURES, features
-from threatscope.schemas import Event
-from threatscope.synthetic import generate
+from threatscope.models.schemas import Event
+from threatscope.services.synthetic import generate
 
 TRAIN_SEEDS = (17, 29, 43, 61)
 MODEL_SEED = 42

@@ -7,8 +7,8 @@ from sqlalchemy import JSON, DateTime, ForeignKey, String, Text, create_engine, 
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from threatscope.rules import analyze
-from threatscope.schemas import Alert, Event
+from threatscope.detection import analyze
+from threatscope.models.schemas import Alert, Event
 
 
 class Base(DeclarativeBase):

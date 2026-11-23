@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-from threatscope.rules.base import alert, densest_window
-from threatscope.schemas import Alert, Event, Severity
+from threatscope.detection.base import alert, densest_window
+from threatscope.models.schemas import Alert, Event, Severity
 
 
 def detect(events: list[Event]) -> list[Alert]:

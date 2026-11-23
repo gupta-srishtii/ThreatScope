@@ -1,5 +1,5 @@
-from threatscope.rules import activity, auth_sequence, failed_login, off_hours
-from threatscope.schemas import Alert, Event
+from threatscope.detection import activity, auth_sequence, failed_login, off_hours
+from threatscope.models.schemas import Alert, Event
 
 
 def analyze(events: list[Event]) -> list[Alert]:

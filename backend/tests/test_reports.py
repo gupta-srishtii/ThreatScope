@@ -2,7 +2,7 @@ import csv
 import io
 import json
 
-from threatscope.synthetic import generate
+from threatscope.services.synthetic import generate
 
 
 def test_report_includes_triage_and_notes(client, dataset):

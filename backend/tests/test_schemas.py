@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from threatscope.schemas import Event
+from threatscope.models.schemas import Event
 
 
 def event_data(**overrides):

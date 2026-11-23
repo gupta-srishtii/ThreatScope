@@ -5,8 +5,8 @@ import os
 import pytest
 from sqlalchemy import delete
 
-from threatscope.storage import DatasetRow, database, load_alerts, load_events, save_dataset
-from threatscope.synthetic import generate
+from threatscope.models.storage import DatasetRow, database, load_alerts, load_events, save_dataset
+from threatscope.services.synthetic import generate
 
 
 @pytest.mark.skipif(

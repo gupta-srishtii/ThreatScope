@@ -2,8 +2,8 @@ import pytest
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 
-from threatscope.storage import DatasetRow, EventRow, database, load_alerts, load_events, save_dataset
-from threatscope.synthetic import generate
+from threatscope.models.storage import DatasetRow, EventRow, database, load_alerts, load_events, save_dataset
+from threatscope.services.synthetic import generate
 
 
 def test_dataset_scoping_and_cascade():

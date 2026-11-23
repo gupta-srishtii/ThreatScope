@@ -5,7 +5,7 @@ from collections import defaultdict, deque
 
 import pandas as pd
 
-from threatscope.schemas import Event
+from threatscope.models.schemas import Event
 
 FEATURES = [
     "hour_sin",

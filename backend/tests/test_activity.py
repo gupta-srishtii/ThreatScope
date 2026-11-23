@@ -1,7 +1,7 @@
-from threatscope.rules import analyze
-from threatscope.rules.activity import detect
-from threatscope.rules.off_hours import detect as off_hours
-from threatscope.synthetic import generate
+from threatscope.detection import analyze
+from threatscope.detection.activity import detect
+from threatscope.detection.off_hours import detect as off_hours
+from threatscope.services.synthetic import generate
 
 
 def test_burst_threshold():

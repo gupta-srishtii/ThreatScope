@@ -1,7 +1,7 @@
 import json
 
-from threatscope.ingestion import MAX_UPLOAD_BYTES
-from threatscope.synthetic import generate
+from threatscope.services.ingestion import MAX_UPLOAD_BYTES
+from threatscope.services.synthetic import generate
 
 
 def test_valid_import(client):

@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
 
+from threatscope.api.investigation import alert_or_404
 from threatscope.dependencies import DB, dataset_or_404, require_access
-from threatscope.investigation_api import alert_or_404
-from threatscope.storage import EventRow
+from threatscope.models.storage import EventRow
 
 router = APIRouter(prefix="/api/datasets/{dataset_id}", dependencies=[Depends(require_access)])
 

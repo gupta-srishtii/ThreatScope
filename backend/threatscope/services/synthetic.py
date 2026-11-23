@@ -3,7 +3,7 @@
 import random
 from datetime import datetime, timedelta, timezone
 
-from threatscope.schemas import Event
+from threatscope.models.schemas import Event
 
 SCENARIOS = {
     "mixed": "Command center: authentication sequence, activity burst and off-hours login",

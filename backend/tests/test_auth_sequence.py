@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-from threatscope.rules.auth_sequence import detect
-from threatscope.synthetic import generate
+from threatscope.detection.auth_sequence import detect
+from threatscope.services.synthetic import generate
 
 
 def test_success_requires_correlated_recent_failures():

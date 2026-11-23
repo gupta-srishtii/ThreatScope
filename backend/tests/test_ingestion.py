@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from threatscope.ingestion import MAX_UPLOAD_BYTES, ImportErrorDetail, parse_events
-from threatscope.synthetic import generate
+from threatscope.services.ingestion import MAX_UPLOAD_BYTES, ImportErrorDetail, parse_events
+from threatscope.services.synthetic import generate
 
 
 def test_json_roundtrip():

@@ -5,7 +5,7 @@ from time import monotonic
 
 from starlette.responses import JSONResponse
 
-from threatscope.ingestion import MAX_UPLOAD_BYTES
+from threatscope.services.ingestion import MAX_UPLOAD_BYTES
 
 
 class RequestGuard:

@@ -1,6 +1,6 @@
 from hashlib import sha256
 
-from threatscope.schemas import Alert, Event, Severity
+from threatscope.models.schemas import Alert, Event, Severity
 
 
 def alert(

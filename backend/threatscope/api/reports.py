@@ -8,10 +8,10 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from sqlalchemy import select
 
+from threatscope.api.investigation import note_dict
+from threatscope.api.query import metrics
 from threatscope.dependencies import DB, dataset_dict, dataset_or_404, require_access
-from threatscope.investigation_api import note_dict
-from threatscope.query_api import metrics
-from threatscope.storage import NoteRow, load_alerts, load_events
+from threatscope.models.storage import NoteRow, load_alerts, load_events
 
 router = APIRouter(prefix="/api/datasets/{dataset_id}", dependencies=[Depends(require_access)])
 

@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 
 from threatscope.dependencies import DB, dataset_or_404, require_access
-from threatscope.schemas import NoteInput, StatusInput
-from threatscope.storage import AlertRow, NoteRow
+from threatscope.models.schemas import NoteInput, StatusInput
+from threatscope.models.storage import AlertRow, NoteRow
 
 router = APIRouter(
     prefix="/api/datasets/{dataset_id}/alerts/{alert_id}", dependencies=[Depends(require_access)]

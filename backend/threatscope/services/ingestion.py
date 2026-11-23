@@ -7,7 +7,7 @@ from pathlib import PurePath
 
 from pydantic import ValidationError
 
-from threatscope.schemas import Event
+from threatscope.models.schemas import Event
 
 MAX_UPLOAD_BYTES = 2 * 1024 * 1024
 MAX_EVENTS = 10000

@@ -7,8 +7,8 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, select
 
 from threatscope.dependencies import DB, dataset_or_404, require_access
-from threatscope.schemas import Severity
-from threatscope.storage import EventRow, load_alerts, load_events
+from threatscope.models.schemas import Severity
+from threatscope.models.storage import EventRow, load_alerts, load_events
 
 router = APIRouter(prefix="/api/datasets/{dataset_id}", dependencies=[Depends(require_access)])
 

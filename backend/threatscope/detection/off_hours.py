@@ -1,5 +1,5 @@
-from threatscope.rules.base import alert
-from threatscope.schemas import Alert, Event, Severity
+from threatscope.detection.base import alert
+from threatscope.models.schemas import Alert, Event, Severity
 
 
 def detect(events: list[Event]) -> list[Alert]:
