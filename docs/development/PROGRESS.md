@@ -67,4 +67,6 @@
 
 ## Repository refactor — November 23, 2026
 
-Audit recorded before changes on refactor/repository-structure. Preserved package/ASGI entry point, model parameters, rule thresholds, test contents and fixture values. Added frontend workspace and domain package boundaries; moved 34 files and categorized docs. No feature rebuild or cache deletion. Verification in progress; see REFACTOR_REPORT.md for exact moves and final evidence.
+Remote verification update: all three CI jobs for code commit dde45e4 passed, including PostgreSQL integration and production browser tests. Evidence: https://github.com/gupta-srishtii/ThreatScope/actions/runs/45116021794 . PR #8 remains open and unmerged; the final documentation-only follow-up records these results.
+
+Audit recorded before changes on refactor/repository-structure. Preserved package/ASGI entry point, model parameters, rule thresholds, test contents and fixture values. Added frontend workspace and domain package boundaries; moved 34 files and categorized docs. No feature rebuild or cache deletion. Local verification passed: 61 backend tests (one PostgreSQL skip), 97.20% coverage, nine frontend tests, six browser flows, lint/typecheck/build, Markdown links and dependency audits. PR #8 is open; remote checks are being monitored. See REFACTOR_REPORT.md for exact moves and final evidence.

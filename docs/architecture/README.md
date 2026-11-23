@@ -16,13 +16,12 @@ backend/threatscope/
   detection/        explainable rules
   main.py           application factory, lifecycle, workspace/import routes
   dependencies.py   scoped sessions, access checks, dataset lookup and quotas
-  schemas.py        normalized Pydantic event/alert contracts
-  ingestion.py      bounded CSV/JSON decoding and validation
-  synthetic.py      seeded, labeled demonstration scenarios
-  storage.py        SQLAlchemy models and transactional dataset persistence
-  rules/            deterministic correlation and evidence construction
+  models/schemas.py normalized Pydantic event/alert contracts
+  models/storage.py transactional dataset persistence
+  services/ingestion.py bounded CSV/JSON decoding and validation
+  services/synthetic.py seeded, labeled demonstration scenarios
   ml/               causal features, seeded model training, held-out evaluation
-  *_api.py          query, investigation, evidence, ML and report routers
+  paths.py          repository-owned evaluation artifact location
 backend/tests/      schema, parser, rule, feature/model, API and database checks
 frontend/tests/e2e/ production-browser synthetic investigation workflows
 sample-data/        validated synthetic JSON/CSV imports

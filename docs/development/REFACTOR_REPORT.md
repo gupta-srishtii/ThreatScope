@@ -47,7 +47,9 @@ README and documentation links follow the new hierarchy. Existing progress is re
 - Frontend: lint, typecheck, 9 unit/interaction tests and production workspace build passed.
 - Python Ruff lint/format checks and frozen UV lock validation passed.
 - Generated JSON/CSV fixtures round-trip through the parser and preserve expected rule outcomes; ML evaluation reproduces its original metrics.
-- Browser, dependency-audit and remote CI outcomes are recorded below when completed. PostgreSQL is available in CI, not installed on this Windows host.
+- All six existing production-browser flows passed after relocation, including backend startup/health, imports, persistent investigations, report exports, real ML scoring, keyboard/mobile behavior and axe audits.
+- npm audit and pip-audit found no known vulnerabilities; existing dependency versions, synthetic fixture values and ML evidence were verified unchanged. All local Markdown links resolve.
+- PostgreSQL is available in CI, not installed on this Windows host. Remote outcomes are recorded below when available.
 
 ## Deployment compatibility
 
@@ -55,4 +57,13 @@ Root Vercel install/build commands continue to work through npm workspace delega
 
 ## Git and PR
 
-Audit committed before moves. Implementation and documentation commits preserve original history. Branch/PR/check state will be recorded after publication. No merge is attempted without passing required checks.
+Audit committed before moves. Implementation and documentation commits preserve original history:
+
+- `09ef4f6`: pre-change audit and migration risks.
+- `a36f90e`: backend domain boundaries and import updates.
+- `0a6e92b`: frontend workspace, test/config paths and deployment compatibility.
+- `dde45e4`: documentation hierarchy, fixtures and exact move inventory.
+
+Published branch: `refactor/repository-structure`. [PR #8](https://github.com/gupta-srishtii/ThreatScope/pull/8) is open and unmerged for review. Main has not been changed by this refactor.
+
+[Remote CI for code commit dde45e4](https://github.com/gupta-srishtii/ThreatScope/actions/runs/45116021794) completed successfully: backend (including PostgreSQL integration), frontend/browser and dependency-audit jobs. A fifth, report-only follow-up records this evidence and triggers normal checks again; it changes no application behavior. No force-push or merge was performed.
