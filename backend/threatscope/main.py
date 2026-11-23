@@ -10,10 +10,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from threatscope.config import Settings
 from threatscope.dependencies import DB, check_quota, dataset_dict, dataset_or_404, require_access
-from threatscope.ingestion import MAX_UPLOAD_BYTES, ImportErrorDetail, parse_events
+from threatscope.models.storage import DatasetRow, database, save_dataset
 from threatscope.security import RequestGuard
-from threatscope.storage import DatasetRow, database, save_dataset
-from threatscope.synthetic import SCENARIOS, generate
+from threatscope.services.ingestion import MAX_UPLOAD_BYTES, ImportErrorDetail, parse_events
+from threatscope.services.synthetic import SCENARIOS, generate
 
 
 class ScenarioInput(BaseModel):
@@ -113,18 +113,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["Content-Type", "X-API-Key"],
     )
     app.include_router(router)
-    from threatscope.query_api import router as query_router
+    from threatscope.api.query import router as query_router
 
     app.include_router(query_router)
-    from threatscope.investigation_api import router as investigation_router
+    from threatscope.api.investigation import router as investigation_router
 
     app.include_router(investigation_router)
-    from threatscope.ml_api import router as ml_router
-    from threatscope.reports_api import router as reports_router
+    from threatscope.api.ml import router as ml_router
+    from threatscope.api.reports import router as reports_router
 
     app.include_router(ml_router)
     app.include_router(reports_router)
-    from threatscope.evidence_api import router as evidence_router
+    from threatscope.api.evidence import router as evidence_router
 
     app.include_router(evidence_router)
 

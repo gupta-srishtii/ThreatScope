@@ -5,13 +5,13 @@ import io
 import json
 from pathlib import Path
 
-from threatscope.ingestion import parse_events
-from threatscope.rules import analyze
-from threatscope.synthetic import generate
+from threatscope.detection import analyze
+from threatscope.services.ingestion import parse_events
+from threatscope.services.synthetic import generate
 
 
 def main():
-    target = Path(__file__).resolve().parents[1] / "samples"
+    target = Path(__file__).resolve().parents[1] / "sample-data"
     target.mkdir(exist_ok=True)
     events = generate("mixed", seed=42, count=120)
     content = json.dumps([e.model_dump(mode="json") for e in events], indent=2) + "\n"

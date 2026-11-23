@@ -1,7 +1,7 @@
 import numpy as np
 
 from threatscope.ml.features import FEATURES, features
-from threatscope.synthetic import generate
+from threatscope.services.synthetic import generate
 
 
 def test_features_are_finite_ordered_and_label_independent():

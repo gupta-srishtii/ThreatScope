@@ -1,6 +1,6 @@
 from ipaddress import ip_address, ip_network
 
-from threatscope.synthetic import SCENARIOS, generate
+from threatscope.services.synthetic import SCENARIOS, generate
 
 
 def test_seeded_complete_scenarios():

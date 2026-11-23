@@ -5,8 +5,8 @@ import json
 import pytest
 
 from threatscope.config import Settings
-from threatscope.ingestion import ImportErrorDetail, parse_events
-from threatscope.synthetic import generate
+from threatscope.services.ingestion import ImportErrorDetail, parse_events
+from threatscope.services.synthetic import generate
 
 
 def test_csv_bom_round_trip_and_invalid_numeric_fields():

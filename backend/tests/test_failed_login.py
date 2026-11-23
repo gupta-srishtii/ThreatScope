@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-from threatscope.rules.failed_login import detect
-from threatscope.synthetic import generate
+from threatscope.detection.failed_login import detect
+from threatscope.services.synthetic import generate
 
 
 def failures():

@@ -1,14 +1,14 @@
 """Run: PYTHONPATH=backend python -m threatscope.ml.evaluate"""
 
 import json
-from pathlib import Path
 
 import sklearn
 from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 
+from threatscope.detection import analyze
 from threatscope.ml.model import MODEL_SEED, TRAIN_SEEDS, score
-from threatscope.rules import analyze
-from threatscope.synthetic import SCENARIOS, generate
+from threatscope.paths import ML_EVALUATION_PATH
+from threatscope.services.synthetic import SCENARIOS, generate
 
 TEST_SEEDS = (101, 203, 307)
 
@@ -55,6 +55,6 @@ def evaluate() -> dict:
 
 if __name__ == "__main__":
     result = evaluate()
-    destination = Path(__file__).resolve().parents[3] / "docs" / "ml-evaluation.json"
+    destination = ML_EVALUATION_PATH
     destination.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))

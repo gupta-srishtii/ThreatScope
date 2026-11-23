@@ -19,7 +19,12 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['frontend/**/*.{ts,tsx}', 'vite.config.ts', 'playwright.config.ts', 'e2e/**/*.ts'],
+    files: [
+      'frontend/**/*.{ts,tsx}',
+      'frontend/vite.config.ts',
+      'frontend/playwright.config.ts',
+      'frontend/tests/**/*.ts',
+    ],
     languageOptions: { globals: { ...globals.browser, ...globals.node, ...globals.vitest } },
     plugins: { 'react-hooks': reactHooks },
     rules: { 'react-hooks/rules-of-hooks': 'error' },

@@ -1,5 +1,5 @@
 from threatscope.ml.model import score, trained_model
-from threatscope.synthetic import generate
+from threatscope.services.synthetic import generate
 
 
 def test_seeded_scoring_and_no_mutation():

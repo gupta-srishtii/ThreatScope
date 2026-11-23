@@ -42,11 +42,11 @@ jobs:
       - name: Reproduce evaluation artifact
         run: |
           PYTHONPATH=backend uv run python -m threatscope.ml.evaluate
-          git diff --exit-code docs/ml-evaluation.json
+          git diff --exit-code docs/ml/evaluation.json
       - name: Verify synthetic import fixtures
         run: |
           PYTHONPATH=backend uv run python scripts/generate_samples.py
-          git diff --exit-code samples
+          git diff --exit-code sample-data
       - uses: actions/upload-artifact@v4
         with:
           name: backend-coverage

@@ -8,7 +8,7 @@ from fastapi import Depends, HTTPException, Request
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from threatscope.storage import DatasetRow
+from threatscope.models.storage import DatasetRow
 
 
 def get_session(request: Request):
