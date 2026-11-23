@@ -1,3 +1,6 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+const repository = fileURLToPath(new URL('../../../', import.meta.url))
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { readFile } from 'node:fs/promises'
@@ -44,7 +47,7 @@ test('investigates evidence, persists notes and exports the reviewed report', as
   await seed(request)
   await connect(page)
   await expect(page.getByLabel('Security metrics')).toContainText('527')
-  await page.screenshot({ path: '.logs/overview.png', fullPage: true })
+  await page.screenshot({ path: path.join(repository, '.logs/overview.png'), fullPage: true })
   await navigate(page, 'Detections')
   await page
     .getByRole('button', {
@@ -194,5 +197,5 @@ test('supports reduced motion, mobile layout and accessible dialogs', async ({ p
       exact: true,
     }),
   ).toBeFocused()
-  await page.screenshot({ path: '.logs/mobile.png', fullPage: true })
+  await page.screenshot({ path: path.join(repository, '.logs/mobile.png'), fullPage: true })
 })

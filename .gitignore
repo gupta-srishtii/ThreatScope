@@ -22,3 +22,9 @@ playwright-report/
 .playwright/
 .logs/
 *.tsbuildinfo
+uploads/
+local-data/
+model-artifacts/
+*.joblib
+*.pkl
+*.pickle
